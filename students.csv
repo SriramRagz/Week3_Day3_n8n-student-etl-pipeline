@@ -1,0 +1,19 @@
+name,email,course,status,enrolled_date
+  JOHN SMITH , JOHN.SMITH@EXAMPLE.COM , Data Analytics ,enrolled,2026-01-05
+Jane Doe,jane.doe@example.com,Python,enrolled,2026-01-07
+  alex johnson,ALEX.J@EXAMPLE.COM, machine learning,enrolled,2026-01-08
+Maria Garcia,maria.garcia@example.com,Data Analytics,enrolled,2026-01-09
+Robert Brown,robert.brown@example.com,Python,enrolled,2026-01-10
+Emily Davis,emily.davis@example.com,AI Fundamentals,enrolled,2026-01-11
+JOHN SMITH,john.smith@example.com,Data Analytics,enrolled,2026-01-05
+  jane doe  , JANE.DOE@EXAMPLE.COM ,PYTHON,enrolled,2026-01-07
+Alex Johnson,alex.j@example.com,Machine Learning,enrolled,2026-01-08
+Priya Kumar,priya.kumar@example.com,Data Analytics,enrolled,2026-01-12
+David Wilson,david.wilson@example.com,Python,completed,2026-01-13
+Sarah Miller,sarah.miller@example.com,AI Fundamentals,enrolled,2026-01-14
+Michael Lee,michael.lee@example.com,Machine Learning,pending,2026-01-15
+ Olivia Martin ,olivia.martin@example.com,Data Analytics,enrolled,2026-01-16
+William Taylor,,Python,enrolled,2026-01-17
+Emma Anderson,emma.anderson@example.com,AI Fundamentals,enrolled,2026-01-18
+Noah Thomas,noah.thomas@example.com,Machine Learning,enrolled,2026-01-19
+Sophia White,sophia.white@example.com,Data Analytics,enrolled,2026-01-20

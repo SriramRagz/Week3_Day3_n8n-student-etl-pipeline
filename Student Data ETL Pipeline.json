@@ -1,0 +1,291 @@
+{
+  "name": "Student Data ETL Pipeline",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d45f5df3-461e-4718-8a10-8cd0e90285c5",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "social eagle assignment n8n",
+        "filter": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        224,
+        0
+      ],
+      "id": "fefa89fe-ae8b-41e3-966a-75585e3c9ffc",
+      "name": "Search files and folders",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "WlTghTC16PZH7DKB",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1LTCk5aLIb1ClX61XPDwHu1TFS2YGnKia",
+          "mode": "list",
+          "cachedResultName": "students.csv",
+          "cachedResultUrl": "https://drive.google.com/file/d/1LTCk5aLIb1ClX61XPDwHu1TFS2YGnKia/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        448,
+        0
+      ],
+      "id": "30693c2d-d2d0-4b0f-9c86-43d44479b933",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "WlTghTC16PZH7DKB",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        0
+      ],
+      "id": "1e37cd7d-da1d-4e2f-a7b1-7f4ab8596b7f",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const r = item.json;\n\n  const tidy = value =>\n    String(value ?? '').trim().replace(/\\s+/g, ' ');\n\n  const titleCase = value =>\n    tidy(value)\n      .toLowerCase()\n      .replace(/\\b[a-z]/g, c => c.toUpperCase());\n\n  return {\n    json: {\n      name: titleCase(r.name),\n      email: tidy(r.email).toLowerCase(),\n      course: titleCase(r.course),\n      status: tidy(r.status).toLowerCase(),\n      enrolled_date: tidy(r.enrolled_date)\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        0
+      ],
+      "id": "61211715-dd1d-4266-983e-a2fcb7b2da95",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "compare": "selectedFields",
+        "fieldsToCompare": "email",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "774455cc-020c-41d5-b57d-78c362fbe733",
+      "name": "Remove Duplicates"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "d8e6a3d2-d293-4192-abf2-a6ad36aae910",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "enrolled",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.4,
+      "position": [
+        1328,
+        16
+      ],
+      "id": "21245901-a3b3-4d6a-bdd2-a8909c75da9e",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.2,
+      "position": [
+        1552,
+        16
+      ],
+      "id": "16c5fb83-0730-4dd5-9688-d051372781d0",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "name": "students_clean.csv",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1Z0uuDSNn5b2cFRmRKxYTDTWUI_qbcLfw",
+          "mode": "list",
+          "cachedResultName": "social eagle assignment n8n",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1Z0uuDSNn5b2cFRmRKxYTDTWUI_qbcLfw"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1776,
+        16
+      ],
+      "id": "da95f853-4735-44da-9af9-ec6c94227727",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "WlTghTC16PZH7DKB",
+          "name": "Google Drive account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "08d3612c-17bf-485a-bac8-645850aa471c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d9d1968989cf41529a392d5b187dbcaf1ab5f0757dda2b57fc5ba66292b8b975"
+  },
+  "nodeGroups": [],
+  "id": "Al6CVD0H9sIAoe8X",
+  "tags": []
+}
